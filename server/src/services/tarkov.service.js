@@ -9,6 +9,9 @@ export async function searchItemsByName(name) {
         id
         name
         shortName
+        iconLink
+        wikiLink
+
       }
     }
   `;
@@ -33,7 +36,6 @@ export async function searchItemsByName(name) {
     throw new Error(`Tarkov API error: ${res.status}`);
   }
 
-  // Return just the array of items
   return json.data.items || [];
 }
 

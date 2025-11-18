@@ -15,6 +15,9 @@ export async function searchItems(req, res) {
       items.map((i) => ({
         id: i.id,
         name: i.name || i.shortName,
+        wikiLink: i.wikiLink,
+        iconLink: i.iconLink
+        
       }))
     );
   } catch (err) {

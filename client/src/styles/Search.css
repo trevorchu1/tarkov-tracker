@@ -1,0 +1,150 @@
+.search-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem;
+  background: #020617; 
+}
+
+.search-card {
+  width: 100%;
+  max-width: 1000px;
+  background: #0b1120;
+  border-radius: 0.75rem;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  border: 1px solid #1f2937;
+  color: #e5e7eb;
+}
+
+.search-title {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.5rem;
+  border: 1px solid #374151;
+  background: #020617;
+  color: #e5e7eb;
+}
+
+.search-input::placeholder {
+  color: #6b7280;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.search-button {
+  padding: 0.6rem 1.1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  background: #3b82f6;
+  color: white;
+  font-weight: 500;
+}
+
+.search-button:hover {
+  background: #2563eb;
+}
+
+.results-wrapper {
+  margin-top: 0.5rem;
+  overflow-x: auto;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.results-table thead {
+  background: #020617;
+}
+
+.results-table th,
+.results-table td {
+  padding: 0.6rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #1f2937;
+}
+
+.results-table th {
+  font-weight: 600;
+  color: #9ca3af;
+}
+
+.item-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.item-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 0.25rem;
+  background: #020617;
+}
+
+.item-link {
+  color: #e5e7eb;
+  text-decoration: none;
+}
+
+.item-link:hover {
+  text-decoration: underline;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.small-button {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  border-radius: 0.4rem;
+  border: none;
+  cursor: pointer;
+  background: #3b82f6;
+  color: #f9fafb;
+}
+
+.small-button.secondary {
+  background: #4b5563;
+}
+
+.small-button:hover {
+  filter: brightness(1.1);
+}
+
+.no-results {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.prices-section {
+  margin-top: 1.5rem;
+}
+
+.prices-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}

@@ -11,6 +11,14 @@ export async function searchItemsByName(name) {
         shortName
         iconLink
         wikiLink
+        buyFor {
+          source
+          priceRUB
+        }
+        sellFor {
+          source
+          priceRUB
+        }
 
       }
     }
@@ -47,13 +55,11 @@ export async function getItemPriceSnapshot(itemId) {
         name
         buyFor {
           source
-          price
-          currency
+          priceRUB
         }
         sellFor {
           source
-          price
-          currency
+          priceRUB
         }
       }
     }

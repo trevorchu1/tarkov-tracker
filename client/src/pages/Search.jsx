@@ -1,59 +1,166 @@
-import { useState } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 import { searchItems, addWatch, getPrices } from '../api/watchlist';
 import PriceTable from '../components/PriceTable.jsx';
+import '../styles/Search.css';
 
-export default function Search(){
-  const [q,setQ] = useState('');
-  const [items,setItems] = useState([]);
-  const [prices,setPrices] = useState(null);
+function getTraderPrice(item) {
+  if (!item || !Array.isArray(item.buyFor)) return null;
 
-  async function doSearch(){
-    setItems(await searchItems(q));
+  const traderOffers = item.buyFor.filter(
+    (o) => o && o.source && o.source !== 'fleaMarket'
+  );
+  if (!traderOffers.length) return null;
+
+  const best = traderOffers.reduce((bestSoFar, offer) => {
+    if (!bestSoFar) return offer;
+    const a = bestSoFar.priceRUB ?? 0;
+    const b = offer.priceRUB ?? 0;
+    return b < a ? offer : bestSoFar;
+  }, null);
+
+  return best?.priceRUB ?? null;
+}
+
+function getFleaPrice(item) {
+  if (!item || !Array.isArray(item.buyFor)) return null;
+
+  const fleaOffer = item.buyFor.find(
+    (o) => o && o.source === 'fleaMarket'
+  );
+
+  return fleaOffer?.priceRUB ?? null;
+}
+
+
+function formatRoubles(value) {
+  if (value == null || Number.isNaN(Number(value))) return '-';
+  return `${Number(value).toLocaleString()}₽`;
+}
+
+export default function Search() {
+  const [q, setQ] = useState('');
+  const [items, setItems] = useState([]);
+  const [prices, setPrices] = useState(null);
+
+  async function doSearch(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!q.trim()) return;
+
+    try {
+      const res = await searchItems(q);
+      console.log("RAW SEARCH RESULTS:", res);
+      window.__items = res; // debug
+      setItems(res || []);
+      setPrices(null);
+    } catch (err) {
+      console.error('searchItems failed', err);
+    }
   }
-  async function viewPrices(item){
-    const res = await getPrices(item.id);
-    setPrices(res.prices || []);
+
+  async function viewPrices(item) {
+    try {
+      const res = await getPrices(item.id);
+      setPrices(res.prices || []);
+    } catch (err) {
+      console.error('getPrices failed', err);
+    }
   }
-  async function add(item){
-    await addWatch({ item_id: item.id, item_name: item.name });
-    alert('Added to watchlist');
+
+  async function add(item) {
+    try {
+      await addWatch({ item_id: item.id, item_name: item.name });
+      alert('Added to watchlist');
+    } catch (err) {
+      console.error('addWatch failed', err);
+      alert('Failed to add to watchlist');
+    }
   }
 
   return (
-    <div>
-      <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search item"/>
-      <button onClick={doSearch}>Search</button>
-      <ul style={{ listStyle: "none", paddingLeft: 0 }}>
-        {items.map((i) => (
-          <li
-            key={i.id}
-            style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}
-          >
-            {i.iconLink && (
-              <img
-                src={i.iconLink}
-                alt={i.name}
-                style={{ width: "100px", height: "100px", objectFit: "contain" }}
-              />
-            )}
+    <div className="search-page">
+      <div className="search-card">
+        <h1 className="search-title">Market Search</h1>
 
-            <a
-              href={i.wikiLink || "#"}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {i.name}
-            </a>
+        <form className="search-form" onSubmit={doSearch}>
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search item"
+            className="search-input"
+          />
+          <button type="submit" className="search-button">
+            Search
+          </button>
+        </form>
 
-            <button onClick={() => viewPrices(i)}>View Prices</button>{" "}
-            <button onClick={() => add(i)}>+ Watch</button>
-          </li>
-        ))}
-      </ul>
+        {items.length > 0 ? (
+          <div className="results-wrapper">
+            <table className="results-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Trader price</th>
+                  <th>Flea price</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((i) => (
+                  <tr key={i.id}>
+                    <td className="item-cell">
+                      {i.iconLink && (
+                        <img
+                          src={i.iconLink}
+                          alt={i.name}
+                          className="item-icon"
+                        />
+                      )}
 
+                      <a
+                        href={i.wikiLink || '#'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="item-link"
+                      >
+                        {i.name}
+                      </a>
+                    </td>
 
-      {prices && <PriceTable prices={prices} />}
+                    <td>{formatRoubles(getTraderPrice(i))}</td>
+                    <td>{formatRoubles(getFleaPrice(i))}</td>
+
+                    <td className="actions-cell">
+                      <button
+                        type="button"
+                        className="small-button"
+                        onClick={() => viewPrices(i)}
+                      >
+                        View Prices
+                      </button>
+                      <button
+                        type="button"
+                        className="small-button secondary"
+                        onClick={() => add(i)}
+                      >
+                        + Watch
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="no-results">No results yet — try a search.</p>
+        )}
+
+        {prices && (
+          <div className="prices-section">
+            <h2 className="prices-title">Price history</h2>
+            <PriceTable prices={prices} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

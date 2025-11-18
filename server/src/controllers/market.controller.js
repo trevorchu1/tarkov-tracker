@@ -11,15 +11,8 @@ export async function searchItems(req, res) {
 
     const items = await searchItemsByName(q);
 
-    return res.json(
-      items.map((i) => ({
-        id: i.id,
-        name: i.name || i.shortName,
-        wikiLink: i.wikiLink,
-        iconLink: i.iconLink
-        
-      }))
-    );
+    return res.json(items || []);
+    
   } catch (err) {
     console.error("[market.controller] searchItems failed:", err);
     return res

@@ -24,15 +24,34 @@ export default function Search(){
     <div>
       <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search item"/>
       <button onClick={doSearch}>Search</button>
-      <ul>
-        {items.map(i=>(
-          <li key={i.id}>
-            {i.name}{' '}
-            <button onClick={()=>viewPrices(i)}>View Prices</button>{' '}
-            <button onClick={()=>add(i)}>+ Watch</button>
+      <ul style={{ listStyle: "none", paddingLeft: 0 }}>
+        {items.map((i) => (
+          <li
+            key={i.id}
+            style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}
+          >
+            {i.iconLink && (
+              <img
+                src={i.iconLink}
+                alt={i.name}
+                style={{ width: "100px", height: "100px", objectFit: "contain" }}
+              />
+            )}
+
+            <a
+              href={i.wikiLink || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {i.name}
+            </a>
+
+            <button onClick={() => viewPrices(i)}>View Prices</button>{" "}
+            <button onClick={() => add(i)}>+ Watch</button>
           </li>
         ))}
       </ul>
+
 
       {prices && <PriceTable prices={prices} />}
     </div>

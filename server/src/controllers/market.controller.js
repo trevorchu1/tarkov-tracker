@@ -1,4 +1,3 @@
-// server/src/controllers/market.controller.js
 import { pool } from "../db/pool.js";
 import {
   searchItemsByName,
@@ -37,7 +36,6 @@ export async function getPricesForItem(req, res) {
 
     const rows = [];
 
-    // Normalize buyFor prices
     for (const offer of item.buyFor || []) {
       rows.push({
         item_id: item.id,
@@ -48,7 +46,6 @@ export async function getPricesForItem(req, res) {
       });
     }
 
-    // Normalize sellFor prices
     for (const offer of item.sellFor || []) {
       rows.push({
         item_id: item.id,

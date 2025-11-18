@@ -1,9 +1,7 @@
-// server/src/services/tarkov.service.js
 import fetch from "node-fetch";
 
 const BASE = process.env.TARKOV_API_BASE || "https://api.tarkov.dev/graphql";
 
-// Search items by (partial) name using GraphQL
 export async function searchItemsByName(name) {
   const query = `
     query ($name: String) {
@@ -39,7 +37,6 @@ export async function searchItemsByName(name) {
   return json.data.items || [];
 }
 
-// Get price info for a specific item
 export async function getItemPriceSnapshot(itemId) {
   const query = `
     query ($id: ID!) {

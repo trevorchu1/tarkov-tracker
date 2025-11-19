@@ -32,24 +32,48 @@ export async function getPricesForItem(req, res) {
 
     const rows = [];
 
+    const isValidPrice = (p) =>
+      typeof p === "number" && !Number.isNaN(p);
+
     for (const offer of item.buyFor || []) {
+      if (!isValidPrice(offer.priceRUB)) {
+        console.warn(
+          `[market.controller] Skipping invalid buy price for item ${itemId} from source ${offer.source}:`,
+          {itemId: item.id, price: offer.priceRUB, source: offer.source}
+        );
+        continue;
+      }
       rows.push({
         item_id: item.id,
         item_name: item.name,
         source: `BUY - ${offer.source}`,
-        price: offer.price,
+        price: offer.priceRUB,
         currency: offer.currency || "₽",
       });
     }
 
     for (const offer of item.sellFor || []) {
+      if (!isValidPrice(offer.priceRUB)) {
+        console.warn(
+          `[market.controller] Skipping invalid sell price for item ${itemId} from source ${offer.source}:`,
+          {itemId: item.id, price: offer.priceRUB, source: offer.source}
+        );
+        continue;
+      }
       rows.push({
         item_id: item.id,
         item_name: item.name,
         source: `SELL - ${offer.source}`,
-        price: offer.price,
+        price: offer.priceRUB,
         currency: offer.currency || "₽",
       });
+    }
+
+    if (!rows.length) {
+      console.warn(
+        (`[market.controller] No valid prices found for item ${itemId}`),
+    );
+    return res.json({ itemId, prices: [] });
     }
 
     // cache into DB

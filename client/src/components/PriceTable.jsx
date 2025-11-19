@@ -4,7 +4,7 @@ export default function PriceTable({ prices }){
   if (!prices?.length) return <p>No prices found.</p>;
   return (
     <table>
-      <thead><tr><th>Source</th><th>Price</th><th>Currency</th></tr></thead>
+      <thead><tr><th>Vendor</th><th>Price</th></tr></thead>
       <tbody>
         {prices.map((p, idx)=>(
           <tr key={idx}>

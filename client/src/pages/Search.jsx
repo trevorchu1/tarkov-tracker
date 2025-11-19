@@ -78,82 +78,85 @@ export default function Search() {
 
   return (
     <div className="search-page">
-      <div className="search-card">
-        <h1 className="search-title">Market Search</h1>
+      <div className="search-container">
+        <div className="search-card">
+          <h1 className="search-title">Market Search</h1>
 
-        <form className="search-form" onSubmit={doSearch}>
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search item"
-            className="search-input"
-          />
-          <button type="submit" className="search-button">
-            Search
-          </button>
-        </form>
+          <form className="search-form" onSubmit={doSearch}>
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search item"
+              className="search-input"
+            />
+            <button type="submit" className="search-button">
+              Search
+            </button>
+          </form>
 
-        {items.length > 0 ? (
-          <div className="results-wrapper">
-            <table className="results-table">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Trader price</th>
-                  <th>Flea price</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((i) => (
-                  <tr key={i.id}>
-                    <td className="item-cell">
-                      {i.iconLink && (
-                        <img
-                          src={i.iconLink}
-                          alt={i.name}
-                          className="item-icon"
-                        />
-                      )}
-
-                      <a
-                        href={i.wikiLink || '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="item-link"
-                      >
-                        {i.name}
-                      </a>
-                    </td>
-
-                    <td>{formatRoubles(getTraderPrice(i))}</td>
-                    <td>{formatRoubles(getFleaPrice(i))}</td>
-
-                    <td className="actions-cell">
-                      <button
-                        type="button"
-                        className="small-button"
-                        onClick={() => viewPrices(i)}
-                      >
-                        View Prices
-                      </button>
-                      <button
-                        type="button"
-                        className="small-button secondary"
-                        onClick={() => add(i)}
-                      >
-                        + Watch
-                      </button>
-                    </td>
+          {items.length > 0 ? (
+            <div className="results-wrapper">
+              <table className="results-table">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Trader price</th>
+                    <th>Flea price</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p className="no-results">No results yet — try a search.</p>
-        )}
+                </thead>
+                <tbody>
+                  {items.map((i) => (
+                    <tr key={i.id}>
+                      <td className="item-cell">
+                        {i.iconLink && (
+                          <img
+                            src={i.iconLink}
+                            alt={i.name}
+                            className="item-icon"
+                          />
+                        )}
 
+                        <a
+                          href={i.wikiLink || '#'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="item-link"
+                        >
+                          {i.name}
+                        </a>
+                      </td>
+
+                      <td>{formatRoubles(getTraderPrice(i))}</td>
+                      <td>{formatRoubles(getFleaPrice(i))}</td>
+
+                      <td className="actions-cell">
+                        <button
+                          type="button"
+                          className="small-button"
+                          onClick={() => viewPrices(i)}
+                        >
+                          View Prices
+                        </button>
+                        <button
+                          type="button"
+                          className="small-button secondary"
+                          onClick={() => add(i)}
+                      >
+                         + Watch
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          
+          
+          ) : (
+            <p className="no-results">No results yet — try a search.</p>
+          )}
+        </div>
         {prices && (
           <div className="prices-section">
             <h2 className="prices-title">Price history</h2>

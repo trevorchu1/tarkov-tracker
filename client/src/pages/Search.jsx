@@ -68,7 +68,12 @@ export default function Search() {
 
   async function add(item) {
     try {
-      await addWatch({ item_id: item.id, item_name: item.name });
+      await addWatch({ 
+        item_id: item.id, 
+        item_name: item.name,
+        iconLink: item.iconLink,
+        wikiLink: item.wikiLink
+      });
       alert('Added to watchlist');
     } catch (err) {
       console.error('addWatch failed', err);
@@ -159,7 +164,7 @@ export default function Search() {
         </div>
         {prices && (
           <div className="prices-section">
-            <h2 className="prices-title">Price history</h2>
+            <h2 className="prices-title">Price snapshot</h2>
             <PriceTable prices={prices} />
           </div>
         )}

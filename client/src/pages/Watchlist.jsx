@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { listWatchlist, removeWatch } from '../api/watchlist';
-import '../styles/Search.css'; // reuse the same styling as Search
+import '../styles/Search.css'; // placeholder until watchlist.css
 
 function formatRoubles(value) {
   if (value == null || Number.isNaN(Number(value))) return '-';
@@ -60,7 +60,6 @@ export default function Watchlist() {
                   {rows.map((r) => (
                     <tr key={r.item_id}>
                       <td className="item-cell">
-                        {/* Icon – assumes backend returns r.iconLink */}
                         {r.iconLink && (
                           <img
                             src={r.iconLink}
@@ -69,7 +68,6 @@ export default function Watchlist() {
                           />
                         )}
 
-                        {/* Wiki link – assumes backend returns r.wikiLink */}
                         <a
                           href={r.wikiLink || '#'}
                           target="_blank"

@@ -7,7 +7,8 @@ export async function register(req, res) {
   const hash = await bcrypt.hash(password, 10);
   try {
     const user = await createUser(email, hash);
-    res.status(201).json(user);
+    const token = jwt.sign({ user_id: user.user_id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    res.status(201).json({ token });
   } catch (e) {
     res.status(400).json({ error: 'Email in use?' });
   }

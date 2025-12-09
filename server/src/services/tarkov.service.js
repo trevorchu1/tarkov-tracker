@@ -3,10 +3,10 @@ import fetch from "node-fetch";
 const BASE = process.env.TARKOV_API_BASE || "https://api.tarkov.dev/graphql";
 
 async function fetchWithRetry(url, options, retries = 2, timeout = 15000) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
-
   for (let i = 0; i <= retries; i++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
     try {
       const response = await fetch(url, {
         ...options,
@@ -218,7 +218,6 @@ export async function getTraderItems(traderName, limit = 5000) {
           price
           currency
           priceRUB
-          minTraderLevel
         }
       }
     }

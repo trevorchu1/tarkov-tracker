@@ -175,6 +175,7 @@ export default function Traders() {
                       <tr>
                         <th>Item</th>
                         <th>Price</th>
+                        <th>Level</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -214,6 +215,9 @@ export default function Traders() {
                                   )}
                                 </>
                               ) : '-'}
+                            </td>
+                            <td>
+                              {traderOffer?.minTraderLevel ? `Level ${traderOffer.minTraderLevel}` : '-'}
                             </td>
                             <td className="actions-cell">
                               <button

@@ -2,6 +2,34 @@ import fetch from "node-fetch";
 
 const BASE = process.env.TARKOV_API_BASE || "https://api.tarkov.dev/graphql";
 
+async function fetchWithRetry(url, options, retries = 2, timeout = 15000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  for (let i = 0; i <= retries; i++) {
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      return response;
+    } catch (error) {
+      clearTimeout(timeoutId);
+
+      if (i === retries) {
+        // Last retry failed
+        if (error.name === 'AbortError') {
+          throw new Error('Request timeout after retries');
+        }
+        throw error;
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, i)));
+    }
+  }
+}
+
 export async function searchItemsByName(name) {
   const query = `
     query ($name: String) {
@@ -26,7 +54,7 @@ export async function searchItemsByName(name) {
 
   console.log("[TarkovAPI] searchItemsByName", { name });
 
-  const res = await fetch(BASE, {
+  const res = await fetchWithRetry(BASE, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables: { name } }),
@@ -67,7 +95,7 @@ export async function getItemPriceSnapshot(itemId) {
 
   console.log("[TarkovAPI] getItemPriceSnapshot", { itemId });
 
-  const res = await fetch(BASE, {
+  const res = await fetchWithRetry(BASE, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables: { id: itemId } }),
@@ -104,7 +132,7 @@ export async function getItemHistoricalPrices(itemId) {
 
   console.log("[TarkovAPI] getItemHistoricalPrices", { itemId });
 
-  const res = await fetch(BASE, {
+  const res = await fetchWithRetry(BASE, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables: { id: itemId } }),
@@ -151,7 +179,7 @@ export async function getAllTraders() {
 
   console.log("[TarkovAPI] getAllTraders");
 
-  const res = await fetch(BASE, {
+  const res = await fetchWithRetry(BASE, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query }),
@@ -190,6 +218,7 @@ export async function getTraderItems(traderName, limit = 5000) {
           price
           currency
           priceRUB
+          minTraderLevel
         }
       }
     }
@@ -197,7 +226,7 @@ export async function getTraderItems(traderName, limit = 5000) {
 
   console.log("[TarkovAPI] getTraderItems", { traderName, limit });
 
-  const res = await fetch(BASE, {
+  const res = await fetchWithRetry(BASE, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables: { limit } }),
@@ -264,7 +293,7 @@ export async function getTraderBarters(traderName, limit = 50) {
 
   console.log("[TarkovAPI] getTraderBarters", { traderName, limit });
 
-  const res = await fetch(BASE, {
+  const res = await fetchWithRetry(BASE, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables: { limit } }),

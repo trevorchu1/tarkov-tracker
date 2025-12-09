@@ -14,7 +14,7 @@ services:
         sync: false
       - key: JWT_SECRET
         generateValue: true
-    healthCheckPath: /
+    healthCheckPath: /api/health
 
   - type: web
     name: tarkov-tracker-client

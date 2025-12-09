@@ -8,6 +8,9 @@ https://tarkov-tracker-client.onrender.com/
 
 ## Reflection
 Design choices: I chose to use frameworks I'm familiar with, like React.js and a PostgreSQL database.
+
 Challenges: The API I'm using is an open-source community built API in GraphQL, which I haven't used before. As there isn't official documentation, I had to experiment on the "playground": https://api.tarkov.dev/ to learn how to use the API effectively.
+
 Learning Outcomes: I gained more experience in developing full-stack applications, and this is the first app I have had deployed live on the internet. I had some friction trying to use Render, but it's valuable experience that will make my next deployment easier.
+
 Future Work: I want to add task tracking functionality, where wishlist items will show what tasks they are required for. I would also like to implement a way for users to browse their tasks and check off what they have completed.

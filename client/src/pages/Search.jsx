@@ -154,28 +154,30 @@ export default function Search() {
                       <td>{formatRoubles(getTraderPrice(i))}</td>
                       <td>{formatRoubles(getFleaPrice(i))}</td>
 
-                      <td className="actions-cell">
-                        <button
-                          type="button"
-                          className="small-button"
-                          onClick={() => viewPrices(i)}
+                      <td>
+                        <div className="actions-cell">
+                          <button
+                            type="button"
+                            className="small-button"
+                            onClick={() => viewPrices(i)}
+                          >
+                            View Prices
+                          </button>
+                          <button
+                            type="button"
+                            className="small-button"
+                            onClick={() => viewHistory(i)}
+                          >
+                            Price History
+                          </button>
+                          <button
+                            type="button"
+                            className="small-button secondary"
+                            onClick={() => add(i)}
                         >
-                          View Prices
-                        </button>
-                        <button
-                          type="button"
-                          className="small-button"
-                          onClick={() => viewHistory(i)}
-                        >
-                          Price History
-                        </button>
-                        <button
-                          type="button"
-                          className="small-button secondary"
-                          onClick={() => add(i)}
-                      >
-                         + Watch
-                        </button>
+                           + Watch
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

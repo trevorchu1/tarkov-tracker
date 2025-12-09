@@ -16,14 +16,6 @@ export default function Home(){
             Track prices, compare traders, and optimize your trading strategy.
             Never overpay for items again.
           </p>
-          <div className="hero-buttons">
-            <Link to="/search" className="hero-button primary">
-              Start Searching
-            </Link>
-            <Link to="/watchlist" className="hero-button secondary">
-              View Watchlist
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -65,17 +57,6 @@ export default function Home(){
             </Link>
           </div>
         </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="cta-section">
-        <h2 className="cta-title">Ready to Start Trading?</h2>
-        <p className="cta-description">
-          Join now to track your favorite items and never miss a good deal.
-        </p>
-        <Link to="/login" className="cta-button">
-          Create Free Account
-        </Link>
       </section>
     </div>
   );

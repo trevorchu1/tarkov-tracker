@@ -97,7 +97,10 @@
   color: #e6dcc7;
 }
 
-/* Responsive design */
+.navbar-logout {
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .navbar-container {
     flex-direction: column;

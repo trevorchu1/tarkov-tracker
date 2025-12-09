@@ -4,7 +4,7 @@
 }
 
 .hero-section {
-  padding: 4rem 2rem;
+  padding: 4rem 2rem 2rem 2rem;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -96,7 +96,7 @@
 
 /* Features Section */
 .features-section {
-  padding: 4rem 2rem;
+  padding: 2rem 2rem 4rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }

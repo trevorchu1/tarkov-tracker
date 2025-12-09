@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getTraders, getTraderItems, getTraderBarters, getAggregatedPriceHistory } from '../api/watchlist';
+import { getTraders, getTraderItems, getTraderBarters, getAggregatedPriceHistory, addWatch } from '../api/watchlist';
 import PriceHistoryChart from '../components/PriceHistoryChart.jsx';
 import '../styles/Search.css';
 
@@ -67,6 +67,21 @@ export default function Traders() {
       setTraderBarters([]);
     } finally {
       setItemsLoading(false);
+    }
+  }
+
+  async function add(item) {
+    try {
+      await addWatch({
+        item_id: item.id,
+        item_name: item.name,
+        iconLink: item.iconLink,
+        wikiLink: item.wikiLink
+      });
+      alert('Added to watchlist');
+    } catch (err) {
+      console.error('addWatch failed', err);
+      alert('Failed to add to watchlist');
     }
   }
 
@@ -215,14 +230,25 @@ export default function Traders() {
                                 </>
                               ) : '-'}
                             </td>
-                            <td className="actions-cell">
-                              <button
-                                type="button"
-                                className="small-button"
-                                onClick={() => viewHistory(item)}
-                              >
-                                Price History
-                              </button>
+                            <td>
+                              <div className="actions-cell">
+                                <button
+                                  type="button"
+                                  className="small-button"
+                                  onClick={() => add(item)}
+                                  style={{ minWidth: '140px', whiteSpace: 'nowrap' }}
+                                >
+                                  Add to Watchlist
+                                </button>
+                                <button
+                                  type="button"
+                                  className="small-button"
+                                  onClick={() => viewHistory(item)}
+                                  style={{ minWidth: '120px', whiteSpace: 'nowrap' }}
+                                >
+                                  Price History
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         );
@@ -240,8 +266,8 @@ export default function Traders() {
                     <thead>
                       <tr>
                         <th>Required Items</th>
-                        <th>Reward Items</th>
-                        <th>Level</th>
+                        <th>Reward Item</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -254,38 +280,65 @@ export default function Traders() {
                                   <img
                                     src={req.item.iconLink}
                                     alt={req.item.name}
-                                    style={{ width: '32px', height: '32px', marginRight: '0.5rem' }}
+                                    className="item-icon"
+                                    style={{ marginRight: '0.75rem' }}
                                   />
                                 )}
-                                <span>
-                                  {req.item?.name} × {req.count}
-                                </span>
+                                {req.item?.wikiLink ? (
+                                  <a
+                                    href={req.item.wikiLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="item-link"
+                                  >
+                                    {req.item?.name} × {req.count}
+                                  </a>
+                                ) : (
+                                  <span>{req.item?.name} × {req.count}</span>
+                                )}
                               </div>
                             ))}
                           </td>
-                          <td>
-                            {barter.rewardItems?.map((reward, idx) => (
-                              <div key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.25rem' }}>
-                                {reward.item?.iconLink && (
-                                  <img
-                                    src={reward.item.iconLink}
-                                    alt={reward.item.name}
-                                    style={{ width: '32px', height: '32px', marginRight: '0.5rem' }}
-                                  />
-                                )}
-                                <span>
-                                  {reward.item?.name} × {reward.count}
-                                </span>
-                              </div>
-                            ))}
-                          </td>
-                          <td>
-                            Level {barter.level}
-                            {barter.taskUnlock && (
-                              <div style={{ fontSize: '0.875rem', color: '#666' }}>
-                                Requires: {barter.taskUnlock.name}
-                              </div>
+                          <td className="item-cell">
+                            {barter.rewardItems?.[0]?.item?.iconLink && (
+                              <img
+                                src={barter.rewardItems[0].item.iconLink}
+                                alt={barter.rewardItems[0].item.name}
+                                className="item-icon"
+                              />
                             )}
+                            {barter.rewardItems?.[0]?.item?.wikiLink ? (
+                              <a
+                                href={barter.rewardItems[0].item.wikiLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="item-link"
+                              >
+                                {barter.rewardItems?.[0]?.item?.name} × {barter.rewardItems?.[0]?.count}
+                              </a>
+                            ) : (
+                              <span>{barter.rewardItems?.[0]?.item?.name} × {barter.rewardItems?.[0]?.count}</span>
+                            )}
+                          </td>
+                          <td>
+                            <div className="actions-cell">
+                              <button
+                                type="button"
+                                className="small-button"
+                                onClick={() => add(barter.rewardItems?.[0]?.item)}
+                                style={{ minWidth: '140px', whiteSpace: 'nowrap' }}
+                              >
+                                Add to Watchlist
+                              </button>
+                              <button
+                                type="button"
+                                className="small-button"
+                                onClick={() => viewHistory(barter.rewardItems?.[0]?.item)}
+                                style={{ minWidth: '120px', whiteSpace: 'nowrap' }}
+                              >
+                                Price History
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}

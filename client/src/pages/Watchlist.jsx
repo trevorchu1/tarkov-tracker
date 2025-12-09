@@ -163,28 +163,30 @@ export default function Watchlist() {
                         {r.quantityNeeded || 1}
                       </td>
 
-                      <td className="actions-cell">
-                        <button
-                          type="button"
-                          className="small-button"
-                          onClick={() => openEditModal(r)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          className="small-button"
-                          onClick={() => viewHistory(r)}
-                        >
-                          History
-                        </button>
-                        <button
-                          type="button"
-                          className="small-button secondary"
-                          onClick={() => remove(r.item_id)}
-                        >
-                          Remove
-                        </button>
+                      <td>
+                        <div className="actions-cell">
+                          <button
+                            type="button"
+                            className="small-button"
+                            onClick={() => openEditModal(r)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            className="small-button"
+                            onClick={() => viewHistory(r)}
+                          >
+                            History
+                          </button>
+                          <button
+                            type="button"
+                            className="small-button secondary"
+                            onClick={() => remove(r.item_id)}
+                          >
+                            Remove
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

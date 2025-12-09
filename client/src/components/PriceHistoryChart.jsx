@@ -49,8 +49,10 @@ export default function PriceHistoryChart({ buyPrices, itemName }) {
       ];
       const color = colors[index % colors.length];
 
+      const displayLabel = source.replace(/^BUY - /, '');
+
       data.datasets.push({
-        label: source,
+        label: displayLabel,
         data: buyBySource[source],
         borderColor: color,
         backgroundColor: color.replace('rgb', 'rgba').replace(')', ', 0.1)'),

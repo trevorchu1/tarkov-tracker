@@ -9,8 +9,7 @@ export default function Home(){
       <section className="hero-section">
         <div className="hero-content">
           <h1 className="hero-title">
-            Escape From Tarkov<br />
-            <span className="hero-highlight">Market Tracker</span>
+            <span className="hero-highlight">Tarkov Tracker</span>
           </h1>
           <p className="hero-description">
             Track prices, compare traders, and optimize your trading strategy.
@@ -50,7 +49,7 @@ export default function Home(){
             <div className="feature-icon">🤝</div>
             <h3 className="feature-title">Trader Comparison</h3>
             <p className="feature-description">
-              Compare offers from Prapor, Therapist, Fence, and all other traders in one place.
+              Compare item prices from traders vs the Flea in one place.
             </p>
             <Link to="/traders" className="feature-link">
               View Traders →

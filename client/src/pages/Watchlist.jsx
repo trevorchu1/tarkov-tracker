@@ -19,6 +19,7 @@ export default function Watchlist() {
     try {
       const data = await listWatchlist();
       setRows(data || []);
+
     } catch (err) {
       console.error('listWatchlist failed', err);
     } finally {

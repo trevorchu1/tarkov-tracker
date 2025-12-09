@@ -93,15 +93,12 @@ export async function getPricesForItem(req, res) {
   }
 }
 
-/**
- * Get price history for an item
- * GET /api/market/prices/:itemId/history?days=7
- */
+// days not really working, seems like api only stores past 2 days or so
+// may come back to this later
 export async function getPriceHistoryForItem(req, res) {
   const { itemId } = req.params;
   const days = parseInt(req.query.days) || 7;
 
-  // Validate days parameter (1-90 days)
   if (days < 1 || days > 90) {
     return res.status(400).json({
       error: "Days parameter must be between 1 and 90"
@@ -133,15 +130,11 @@ export async function getPriceHistoryForItem(req, res) {
   }
 }
 
-/**
- * Get aggregated price history for an item (hourly averages)
- * GET /api/market/prices/:itemId/history/aggregated?days=7
- */
+
 export async function getAggregatedPriceHistoryForItem(req, res) {
   const { itemId } = req.params;
   const days = parseInt(req.query.days) || 7;
 
-  // Validate days parameter (1-90 days)
   if (days < 1 || days > 90) {
     return res.status(400).json({
       error: "Days parameter must be between 1 and 90"
@@ -158,13 +151,11 @@ export async function getAggregatedPriceHistoryForItem(req, res) {
       itemName = item?.name;
 
       if (item?.historicalPrices && item.historicalPrices.length > 0) {
-        // Filter by date range and format the data
         const cutoffDate = new Date();
         cutoffDate.setDate(cutoffDate.getDate() - days);
 
         apiHistoricalPrices = item.historicalPrices
           .filter(p => {
-            // Parse timestamp (might be string or number in milliseconds)
             const timestamp = parseInt(p.timestamp);
             return new Date(timestamp) >= cutoffDate;
           })

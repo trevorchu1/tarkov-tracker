@@ -3,6 +3,7 @@ import cors from 'cors';
 import authRoutes from './routes/auth.routes.js';
 import watchlistRoutes from './routes/watchlist.routes.js';
 import marketRoutes from './routes/market.routes.js';
+import traderRoutes from './routes/trader.routes.js';
 
 const app = express();
 app.use(cors());
@@ -13,5 +14,6 @@ app.get('/api/health', (_req, res) => res.json({ ok: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/watchlist', watchlistRoutes);
 app.use('/api/market', marketRoutes);
+app.use('/api/traders', traderRoutes);
 
 export default app;

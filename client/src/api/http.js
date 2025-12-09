@@ -19,6 +19,15 @@ export async function post(path, body, opts={}) {
   return res.json();
 }
 
+export async function put(path, body, opts={}) {
+  const res = await fetch(`${base}${path}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...authHeader() },
+    body: JSON.stringify(body)
+  });
+  return res.json();
+}
+
 export async function del(path) {
   const res = await fetch(`${base}${path}`, { method: 'DELETE', headers: authHeader() });
   return res.ok;

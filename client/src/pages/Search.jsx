@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { searchItems, addWatch, getPrices } from '../api/watchlist';
+import { searchItems, addWatch, getPrices, getAggregatedPriceHistory } from '../api/watchlist';
 import PriceTable from '../components/PriceTable.jsx';
+import PriceHistoryChart from '../components/PriceHistoryChart.jsx';
 import '../styles/Search.css';
 
 function getTraderPrice(item) {
@@ -41,6 +42,7 @@ export default function Search() {
   const [q, setQ] = useState('');
   const [items, setItems] = useState([]);
   const [prices, setPrices] = useState(null);
+  const [priceHistory, setPriceHistory] = useState(null);
 
   async function doSearch(e) {
     if (e && e.preventDefault) e.preventDefault();
@@ -68,8 +70,8 @@ export default function Search() {
 
   async function add(item) {
     try {
-      await addWatch({ 
-        item_id: item.id, 
+      await addWatch({
+        item_id: item.id,
         item_name: item.name,
         iconLink: item.iconLink,
         wikiLink: item.wikiLink
@@ -78,6 +80,23 @@ export default function Search() {
     } catch (err) {
       console.error('addWatch failed', err);
       alert('Failed to add to watchlist');
+    }
+  }
+
+  async function viewHistory(item) {
+    try {
+      const res = await getAggregatedPriceHistory(item.id, 7);
+      console.log('Price history response:', res);
+
+      if (res.source) {
+        console.log(`Data source: ${res.source}`);
+      }
+
+      setPriceHistory({ itemName: item.name, data: res });
+    } catch (err) {
+      console.error('getAggregatedPriceHistory failed', err);
+      const errorMsg = err.response?.data?.error || err.message || 'Unknown error';
+      alert(`Failed to load price history: ${errorMsg}`);
     }
   }
 
@@ -145,6 +164,13 @@ export default function Search() {
                         </button>
                         <button
                           type="button"
+                          className="small-button"
+                          onClick={() => viewHistory(i)}
+                        >
+                          Price History
+                        </button>
+                        <button
+                          type="button"
                           className="small-button secondary"
                           onClick={() => add(i)}
                       >
@@ -166,6 +192,15 @@ export default function Search() {
           <div className="prices-section">
             <h2 className="prices-title">Price snapshot</h2>
             <PriceTable prices={prices} />
+          </div>
+        )}
+
+        {priceHistory && (
+          <div className="prices-section">
+            <PriceHistoryChart
+              buyPrices={priceHistory.data.buyPrices}
+              itemName={priceHistory.itemName}
+            />
           </div>
         )}
       </div>
